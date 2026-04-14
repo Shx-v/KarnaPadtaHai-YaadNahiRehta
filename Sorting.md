@@ -134,3 +134,59 @@ public:
 - Space Complexity: O(n)
 - Divide first, then merge all sorted array to form one sorted array
 - Recursive approach
+
+## Radix Sort
+
+### Code
+```cpp
+void radixSort(vector<int>& nums) {
+    int n = nums.size();
+    vector<int> output(n);
+
+    for (int shift = 0; shift < 32; shift += 8) {
+        vector<int> count(256, 0);
+
+        for (int x : nums) {
+            count[(x >> shift) & 0xFF]++;
+        }
+
+        if (shift != 24) {
+            int sum = 0;
+            for (int i = 0; i < 256; i++) {
+                int temp = count[i];
+                count[i] = sum;
+                sum += temp;
+            }
+        } else {
+            int sum = 0;
+
+            for (int i = 128; i < 256; i++) {
+                int temp = count[i];
+                count[i] = sum;
+                sum += temp;
+            }
+
+            for (int i = 0; i < 128; i++) {
+                int temp = count[i];
+                count[i] = sum;
+                sum += temp;
+            }
+        }
+
+        for (int x : nums) {
+            output[count[(x >> shift) & 0xFF]++] = x;
+        }
+
+        nums = output;
+    }
+}
+```
+
+- Time Complexity: O(n)
+- Space Complexity: O(n)
+- Non-comparative sorting algorithm (does not use comparisons like < or >)
+- Processes elements digit by digit (least significant to most significant)
+- Uses counting sort as a subroutine for each digit
+- Works efficiently for fixed-size integers (e.g., 32-bit → 4 passes)
+- Stable sorting algorithm (maintains relative order of equal elements)
+- Iterative approach (no recursion involved)
