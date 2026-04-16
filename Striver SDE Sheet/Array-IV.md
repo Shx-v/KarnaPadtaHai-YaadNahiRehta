@@ -139,3 +139,66 @@ public:
     }
 };
 ```
+
+## Largest Subarray with K sum
+
+- [GfG](https://www.geeksforgeeks.org/problems/longest-sub-array-with-sum-k0809/1)
+
+```cpp
+class Solution {
+  public:
+    int longestSubarray(vector<int>& arr, int k) {
+        // code here
+        unordered_map<int,int> mp;
+        int sum = 0, maxi = 0;
+        
+        for(int i = 0; i < arr.size(); i++) {
+            sum += arr[i];
+            
+            if(sum == k) {
+                maxi = max(maxi, i+1);
+            }
+            
+            if(mp.find(sum - k) != mp.end()) {
+                maxi = max(maxi, i - mp[sum-k]);
+            }
+            
+            if(mp.find(sum) == mp.end()) {
+                mp[sum] = i;
+            }
+        }
+        
+        return maxi;
+        
+    }
+};
+```
+
+## Count Subarrays with given xor K
+
+- [GfG](https://www.geeksforgeeks.org/problems/count-subarray-with-given-xor/1)
+
+```cpp
+class Solution {
+public:
+    long subarrayXor(vector<int> &arr, int k) {
+        unordered_map<int,int> mp;
+        int xorr = 0;
+        long long cnt = 0;
+
+        mp[0] = 1;
+
+        for (int num : arr) {
+            xorr ^= num;
+
+            cnt += mp[xorr ^ k];
+
+            mp[xorr]++;
+        }
+
+        return cnt;
+    }
+};
+```
+
+## 
